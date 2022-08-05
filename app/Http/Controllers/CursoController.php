@@ -17,7 +17,7 @@ class CursoController extends Controller
         /*traemos toda la informacion de ka tabla cursos a
         través de la instancia cursito y el metodo all*/
         $cursito = Curso::all();
-        //se adjunta cursito ala vist para poderlo usar
+        //se adjunta cursito a la vista para poderlo usar
         return view('cursos.index', compact('cursito'));
     }
 
@@ -62,7 +62,10 @@ class CursoController extends Controller
      */
     public function show($id)
     {
-        return view('cursos.show');
+        $cursito = Curso::find($id);
+        return view('cursos.show', compact('cursito'));
+        //return view('cursos.show');
+        //return 'El id de este curso es: ' . $id;
     }
 
     /**
@@ -73,7 +76,10 @@ class CursoController extends Controller
      */
     public function edit($id)
     {
-        return view('cursos.edit');
+        $cursito = Curso::find($id);
+        //return 'La informacion que usted quiere actualizar, se veria asi en formato array: ' .$cursito;
+        return view('cursos.edit', compact('cursito'));
+        //return view('cursos.edit');
     }
 
     /**
@@ -85,7 +91,16 @@ class CursoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $cursito = Curso::find($id);
+        //return $cursito;
+        //return $request;
+       // $cursito->fill($request->all()); //lleneme con los nuevos datos todo lo que viene de request
+       $cursito->fill($request->except('imagen'));
+       if($request->hasFile('imagen')){
+        $cursito->imagen = $request->file('imagen')->store('public/cursos');
+       }
+        $cursito->save();// guardeme todo en la base de datos
+        return 'La actualizacion fue exitosa';
     }
 
     /**
