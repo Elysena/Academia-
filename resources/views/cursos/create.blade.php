@@ -3,8 +3,22 @@
 @section('titulo', 'Crear Curso')
 
 @section('contenido')
-<form action="/cursos" method="POST" enctype="multipart/form-data">
+<br>
+<form method="post" action="/recursos" enctype="multipart/form-data">
     @csrf
+    @if ($errors->any())
+        @foreach ($errors->all() as $alerta)
+            <div class="alert alert-danger" role="alert">
+                <ul>
+                    <li>{{$alerta}}</li>
+                </ul>
+            </div>
+
+            <p>{{$alerta}}</p>
+        @endforeach
+    @endif
+
+
     <br>
         <h2>Aquí puedes crear un nuevo curso</h2>
         <div class="form-group">
@@ -24,7 +38,7 @@
             <br>
             <input id="imagen" type="file" name="imagen">
         </div>
-        <button class="btn btn-info" type="submit">Crear</button>
+        <button class="btn btn-warning" type="submit">Crear</button>
     </div>
 </form>
 @endsection

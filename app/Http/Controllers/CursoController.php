@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\storeCursoReques;
 use App\Models\Curso;
 use Illuminate\Http\Request;
 
@@ -37,21 +38,35 @@ class CursoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(storeCursoReques $solicitud)
     {
+        /*
+        //implementamos validaciones
+            $validacionDatos = $solicitud->validate([
+            'nombre'=>'required/max:10',
+            'avatar'=>'required/image'
+        ]);
+        */
+
+        //si dentro de la solicitud viene un archivo desde el campo
+        if($solicitud->hasFile('avatar')){
+            //la variable archivo contendra la informacion del archivo de
+            $archivo = $solicitud-file('avatar');
+            //se le asigna un nombre al archivo que seria fecha Unix Junto
         //Se devuelve la peticion hecha al servidor
         //return $request->all();
-        $cursito = new Curso();//Lo que hicimos fue crear una instancia de la clase Curso
-        $cursito->nombre = $request->input('nombre');
-        $cursito->descripcion = $request->input('descripcion');
-        $cursito->duracion = $request->input('duracion');
-        if($request->hasFile('imagen')){
-            $cursito->imagen = $request->file('imagen')->store('public/cursos');
-        }
-        $cursito->save();//Con el comando save se registra la info en la db
-        return 'Guardado exitosamente';
-        //return $request->input('nombre');
+        //$cursito = new Curso();//Lo que hicimos fue crear una instancia de la clase Curso
+        //$cursito->nombre = $request->input('nombre');
+        //$cursito->descripcion = $request->input('descripcion');
+        //$cursito->duracion = $request->input('duracion');
+        //if($request->hasFile('imagen')){
+            //$cursito->imagen = $request->file('imagen')->store('public/cursos');
+        //}
+        //$cursito->save();//Con el comando save se registra la info en la db
+        //return 'Guardado exitosamente';
+        //return $request->input('nombre')
     }
+}
 
 
     /**
@@ -89,8 +104,19 @@ class CursoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $solicitud,)
     {
+        //implementando validaciones
+        $validacionDatos = $solicitud-> validate([
+            'nombre'=>'required|max:10',
+            'avatar'=>'required|image'
+        ]);
+        //si dentro de la solicitud  viene un archivo desde el compo
+        if($solicitud->hasFile('avatar')){
+            //la variable archivo contendra la informacion de archivo
+            $archivo = $solicitud->file('avatar');
+            //se le asigna un nombre al archivo que seria fecha UNIX junto
+        }
         $cursito = Curso::find($id);
         //return $cursito;
         //return $request;
@@ -111,6 +137,18 @@ class CursoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $cursito = curso::find($id);
+        //return $cursito;
+        $urlImagenBD = $cursito->imagen;
+        //return $urlImagenBD;
+        /*al nombre de la imagen de la base de datos le quite la parte que
+        y la cambio por \storage\\ ya que es donde esta realmente la imagen*/
+        $nombreImagen = str_replace('public/','\storage\\',$urlImagenBD);
+        //return $nombreImagen;
+        $rutaCompleta = public_path().$nombreImagen;
+        //return $rutaCompleta;
+        unlink($rutaCompleta);
+        $cursito->delete();
+        return 'Eliminado';
     }
 }
