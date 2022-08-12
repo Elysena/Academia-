@@ -20,6 +20,9 @@
                         <a class="nav-link" href="/cursos/create">Crear Curso <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
+                        <a class="nav-link" href="/docentes">Docentes<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
                         <a class="nav-link" href="/cursos/nosotros">Sobre Nosotros <span class="sr-only">(current)</span></a>
                     </li>
                 </ul>

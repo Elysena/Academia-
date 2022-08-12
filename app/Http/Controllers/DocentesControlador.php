@@ -1,12 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Http\Requests\storeCursoReques;
-use App\Models\Curso;
+use App\Http\Requests\storeDocentesRequest;
+use App\Models\Docentes;
 use Illuminate\Http\Request;
 
-class CursoController extends Controller
+class DocentesControlador extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,11 +14,13 @@ class CursoController extends Controller
      */
     public function index()
     {
-        /*traemos toda la informacion de la tabla cursos a
-        través de la instancia cursito y el metodo all*/
-        $cursito = Curso::all();
-        //se adjunta cursito a la vista para poderlo usar
-        return view('cursos.index', compact('cursito'));
+         /*traemos toda la informacion de la tabla docentes a
+        través de la instancia theacher y el metodo all*/
+        $theacher = Docentes::all();
+        //se adjunta theacher a la vista para poderlo usar
+        return view('docentes.index', compact('theacher'));
+
+
     }
 
     /**
@@ -29,7 +30,7 @@ class CursoController extends Controller
      */
     public function create()
     {
-        return view('cursos.create');
+        return view('docentes.create');
     }
 
     /**
@@ -38,36 +39,12 @@ class CursoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(storeCursoReques $solicitud)
+    public function store(storeDocentesRequest $solicitud)
     {
-        /*
-        //implementamos validaciones
-            $validacionDatos = $solicitud->validate([
-            'nombre'=>'required/max:10',
-            'avatar'=>'required/image'
-        ]);
-        */
-
-        //si dentro de la solicitud viene un archivo desde el campo
         if($solicitud->hasFile('avatar')){
-            //la variable archivo contendra la informacion del archivo de
             $archivo = $solicitud-file('avatar');
-            //se le asigna un nombre al archivo que seria fecha Unix Junto
-        //Se devuelve la peticion hecha al servidor
-        //return $request->all();
-        //$cursito = new Curso();//Lo que hicimos fue crear una instancia de la clase Curso
-        //$cursito->nombre = $request->input('nombre');
-        //$cursito->descripcion = $request->input('descripcion');
-        //$cursito->duracion = $request->input('duracion');
-        //if($request->hasFile('imagen')){
-            //$cursito->imagen = $request->file('imagen')->store('public/cursos');
-        //}
-        //$cursito->save();//Con el comando save se registra la info en la db
-        //return 'Guardado exitosamente';
-        //return $request->input('nombre')
+        }
     }
-}
-
 
     /**
      * Display the specified resource.
@@ -77,10 +54,8 @@ class CursoController extends Controller
      */
     public function show($id)
     {
-        $cursito = Curso::find($id);
-        return view('cursos.show', compact('cursito'));
-        //return view('cursos.show');
-        //return 'El id de este curso es: ' . $id;
+        $theacher = Docentes::find($id);
+        return view('docentes.show', compact('theacher'));
     }
 
     /**
@@ -91,10 +66,8 @@ class CursoController extends Controller
      */
     public function edit($id)
     {
-        $cursito = Curso::find($id);
-        //return 'La informacion que usted quiere actualizar, se veria asi en formato array: ' .$cursito;
-        return view('cursos.edit', compact('cursito'));
-        //return view('cursos.edit');
+        $theacher = Docentes::find($id);
+        return view('docentes.edit', compact('theacher'));
     }
 
     /**
@@ -104,7 +77,7 @@ class CursoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, $solicitud,)
+    public function update(Request $request, $id,$solicitud,)
     {
         //implementando validaciones
         $validacionDatos = $solicitud-> validate([
@@ -117,15 +90,15 @@ class CursoController extends Controller
             $archivo = $solicitud->file('avatar');
             //se le asigna un nombre al archivo que seria fecha UNIX junto
         }
-        $cursito = Curso::find($id);
+        $theacher = Docentes::find($id);
         //return $cursito;
         //return $request;
        // $cursito->fill($request->all()); //lleneme con los nuevos datos todo lo que viene de request
-       $cursito->fill($request->except('imagen'));
+       $theacher->fill($request->except('imagen'));
        if($request->hasFile('imagen')){
-        $cursito->imagen = $request->file('imagen')->store('public/cursos');
+        $theacher->imagen = $request->file('imagen')->store('public/docentes');
        }
-        $cursito->save();// guardeme todo en la base de datos
+        $theacher->save();// guardeme todo en la base de datos
         return 'La actualizacion fue exitosa';
     }
 
@@ -137,9 +110,9 @@ class CursoController extends Controller
      */
     public function destroy($id)
     {
-        $cursito = curso::find($id);
+        $theacher = Docentes::find($id);
         //return $cursito;
-        $urlImagenBD = $cursito->imagen;
+        $urlImagenBD = $theacher->imagen;
         //return $urlImagenBD;
         /*al nombre de la imagen de la base de datos le quite la parte que
         y la cambio por \storage\\ ya que es donde esta realmente la imagen*/
@@ -148,7 +121,7 @@ class CursoController extends Controller
         $rutaCompleta = public_path().$nombreImagen;
         //return $rutaCompleta;
         unlink($rutaCompleta);
-        $cursito->delete();
+        $theacher->delete();
         return 'Eliminado';
     }
 }
